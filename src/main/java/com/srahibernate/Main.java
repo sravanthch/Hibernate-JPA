@@ -1,34 +1,29 @@
 package com.srahibernate;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-
 public class Main {
 
     public static void main(String[] args) {
 
+        AlienDAO dao = new AlienDAO();
+
+        // CREATE
         Alien a1 = new Alien();
-        a1.setAid(103);
-        a1.setAname("Harsh");
-        a1.setTech("Gen AI");
+        a1.setAid(104);
+        a1.setAname("Sai");
+        a1.setTech("Databases");
+        dao.createAlien(a1);
 
-//        Configuration config = new Configuration();
-//        config.configure("hibernate.cfg.xml");
-//        config.addAnnotatedClass(Alien.class);
+        // READ
+        Alien alien = dao.getAlien(104);
+        System.out.println(alien);
 
-        SessionFactory factory = new Configuration().
-                                 addAnnotatedClass(Alien.class).
-                                 configure(). //if XML file name is different use it as argument
-                                 buildSessionFactory();
-        Session session = factory.openSession();
+        // UPDATE
+        alien.setTech("Spring Boot");
+        dao.updateAlien(alien);
 
-        Transaction transaction = session.beginTransaction();
-        session.persist(a1);
-        transaction.commit();
+        // DELETE
+        dao.deleteAlien(104);
 
-        session.close();
-        factory.close();
+        HibernateUtil.shutDown();
     }
 }
